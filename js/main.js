@@ -1,8 +1,10 @@
 myForm = document.getElementById('myForm');
 
+
 myForm.addEventListener( 'submit', (e) =>{
-    const siteName = document.getElementById('siteName').value;
-    const siteUrl = document.getElementById('siteName').value;
+    const firstname = document.getElementById('firstname').value;
+    const lastname = document.getElementById('lastname').value;
+    const phone = document.getElementById('phone').value;
 
      e.preventDefault();
 
@@ -10,66 +12,94 @@ myForm.addEventListener( 'submit', (e) =>{
      /*if(!validateForm(siteName, siteUrl)){
         return false;
   }*/
-     bookmark = {
-         name:  siteName,
-         url: siteUrl
+     contact = {
+         firstname:  firstname,
+         lastname: lastname,
+         phone: phone
      }
-     if(localStorage.getItem('bookmarks')== null){
+     if(localStorage.getItem('contacts')== null){
          
         //initialize array
-         const bookmarks = [];
-         bookmarks.push(bookmark);
+         const contacts = [];
+         contacts.push(contact);
          
-         localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
+         localStorage.setItem('contacts', JSON.stringify(contacts));
 
      }
      else{
          //get bookmarks from local storage
-        const bookmarks = JSON.parse(localStorage.getItem('bookmarks'));
+        const contacts = JSON.parse(localStorage.getItem('contacts'));
 
         //add the bookmark to local storage
-        bookmarks.push(bookmark);
-        localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
+        contacts.push(contact);
+        localStorage.setItem('contacts', JSON.stringify(contacts));
 
      }
-     fetchbookmarks();
+     fetchcontacts();
         
 }
 );
 
-function deleteBookmark(url){
+const filterInput = document.getElementById('filterInput');
+
+
+function filterNames(){
+    const filterValue = document.getElementById('filterInput').value.toUpperCase();
+    const contactlist = document.getElementById('contactlist');
+    const list = document.querySelectAll('li');
+
+    //loop through the list
+     for(let i= 0; i<list.lenghth; i++){
+         let li = list[i].getElementsByTagName('li')[0];
+
+         //check for matches
+         if(li.innerHTML.toUpperCase().indexOf(filterValue)>-1){
+               list[i].style.display= '';
+         }else{
+             list[i].style.display = 'none';
+
+         }
+
+     }
+
+}
+
+function deletecontacts(id){
 
     //get bokmarks from local storage
-    const bookmarks = JSON.parse(localStorage.getItem('bookmarks')); 
+    const contacts = JSON.parse(localStorage.getItem('contacts')); 
 
     //loop through bookmarks
 
-    for(let i =0; i<bookmarks.length; i++){
-        if(bookmarks[i].url==url){
-            bookmarks.splice(i, 1);
+    for(let i =0; i<contacts.length; i++){
+        if(contacts[i].url==url){
+            contacts.splice(i, 1);
         }
 
     }
-    localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
-    fetchbookmarks();
+    localStorage.setItem('contacts', JSON.stringify(contacts));
+    fetchcontacts();
 }
 //fetching bokmarks
-function fetchbookmarks(){
-    const bookmarks = JSON.parse(localStorage.getItem('bookmarks')); 
+function fetchcontacts(){
+    const contacts = JSON.parse(localStorage.getItem('contacts')); 
     //get output results
-     const bookmarkresults = document.getElementById('bookmarkResults');
+     const contactlist = document.getElementById('contactlist');
      
      //build output
-     bookmarkresults.innerHTML = '';
-     for(let i=0; i< bookmarks.length; i++){
-         let name = bookmarks[i].name;
-         let url = bookmarks[i].url;
+     contactlist.innerHTML = '';
+     for(let i=0; i< contacts.length; i++){
+         let firstname = contacts[i].firstname;
+         let lastname = contacts[i].lastname;
+         let phone = contacts[i].phone;
 
-         bookmarkresults.innerHTML += '<div class="well">' + 
-                                        '<h3>' + name +
-                                        '<a class= "btn btn-info" target= "_blank" href = "'+ url+ '">visit</a> ' +
-                                        '<a onclick="deleteBookmark(\''+url+'\')" class= "btn btn-danger" href = "#">Delete</a> ' +
-                                         '</h3>' + 
+         contactlist.innerHTML += '<div class="panel panel" style= "color:black;">' + 
+                                         '<ul>' +
+                                        '<li>' + firstname + '</li>' +
+                                        '<li>' + lastname + '</li> ' +
+                                         '<li>' + phone + '</li>' +
+                                         '</ul>' +
+                                        
                                          '</div>'
 
      }
