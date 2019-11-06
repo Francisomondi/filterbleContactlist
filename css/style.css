@@ -13,6 +13,10 @@ body {
     padding-right: 15px;
     padding-left: 15px;
   }
+  #filterInput{
+     color: #000;
+    float: right;
+  }
   
   /* Custom page header */
   .header {
